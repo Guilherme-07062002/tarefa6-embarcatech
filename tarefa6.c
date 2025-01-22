@@ -17,11 +17,11 @@ void display_message_sinal_vermelho(uint8_t *ssd, struct render_area *frame_area
 #define LED_G_PIN 11
 #define LED_B_PIN 12
 
-// Definição de botão
+// Definição do botão A
 #define BTN_A_PIN 5
 
 // Variáveis globais
-int A_state = 0;    //Botao A está pressionado?
+int A_state = 0;    // Armazena o estado do botão A
 // Variáveis para o display
 uint8_t *ssd;
 struct render_area frame_area; 
@@ -68,6 +68,7 @@ int WaitWithRead(int timeMS){
     return 0;
 }
 
+// Definições de pinos I2C
 const uint I2C_SDA = 14;
 const uint I2C_SCL = 15;
 
@@ -76,7 +77,7 @@ void display_message_sinal_verde(uint8_t *ssd, struct render_area *frame_area) {
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
-    // Exibir mensagem no display
+    // Exibir mensagem
     char *text[] = {
         "SINAL ABERTO     ",
         "ATRAVESSAR COM",
@@ -95,7 +96,7 @@ void display_message_sinal_amarelo(uint8_t *ssd, struct render_area *frame_area)
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
-    // Exibir mensagem no display
+    // Exibir mensagem
     char *text[] = {
         "SINAL DE ",
         "ATENCAO     ",
@@ -114,7 +115,7 @@ void display_message_sinal_vermelho(uint8_t *ssd, struct render_area *frame_area
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
-    // Exibir mensagem no display
+    // Exibir mensagem
     char *text[] = {
         "SINAL FECHADO     ",
         "AGUARDE       "};
@@ -151,12 +152,12 @@ int main() {
 
     calculate_render_area_buffer_length(&frame_area);
 
-    // zera o display inteiro
+    // Zera o display inteiro
     ssd = malloc(ssd1306_buffer_length);
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, &frame_area);
 
-    // INICIANDO LEDS
+    // Iniciando leds
     gpio_init(LED_R_PIN);
     gpio_set_dir(LED_R_PIN, GPIO_OUT);
     gpio_init(LED_G_PIN);
@@ -164,29 +165,30 @@ int main() {
     gpio_init(LED_B_PIN);
     gpio_set_dir(LED_B_PIN, GPIO_OUT);
 
-    // INICIANDO BOTÄO
+    // Iniciando botäo
     gpio_init(BTN_A_PIN);
     gpio_set_dir(BTN_A_PIN, GPIO_IN);
     gpio_pull_up(BTN_A_PIN);
 
     while(true){
         SinalFechado();
-        A_state = WaitWithRead(8000);   //espera com leitura do botäo
+        A_state = WaitWithRead(8000);   // Espera leitura do botão A por 8s
 
-        if(A_state){               //ALGUEM APERTOU O BOTAO - SAI DO SEMAFORO NORMAL
-            //SINAL AMARELO PARA OS CARROS POR 5s
+        if(A_state){               // Se foi apertado o botão, mudar ciclo
+            // Liga sinal amarelo por 5s
             SinalAtencao();
             sleep_ms(5000);
 
-            //SINAL VERMELHO PARA OS CARROS POR 10s
+            // Liga sinal verde por 10s
             SinalAberto();
             sleep_ms(10000);
 
-        }else{                          //NINGUEM APERTOU O BOTAO - CONTINUA NO SEMAFORO NORMAL
+        }else{                          // Se ninguém apertou o botão, segue o ciclo normal
+            // Liga sinal amarelo por 2s
             SinalAtencao();
             sleep_ms(2000);
 
-            //SINAL VERMELHO PARA OS CARROS POR 15s
+            // Liga sinal verde por 8s
             SinalAberto();
             sleep_ms(8000);
         }
