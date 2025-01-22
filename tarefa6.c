@@ -72,7 +72,9 @@ void display_message_sinal_verde(uint8_t *ssd, struct render_area *frame_area) {
     render_on_display(ssd, frame_area);
 
     char *text[] = {
-        "  SINAL ABERTO - ATRAVESSAR COM CUIDADO   "};
+        "SINAL ABERTO     ",
+        "ATRAVESSAR COM",
+        "CUIDADO"};
 
     int y = 0;
     for (uint i = 0; i < count_of(text); i++) {
@@ -88,7 +90,9 @@ void display_message_sinal_amarelo(uint8_t *ssd, struct render_area *frame_area)
     render_on_display(ssd, frame_area);
 
     char *text[] = {
-        "  SINAL DE ATENÇÃO - PREPARE-SE   "};
+        "SINAL DE ",
+        "ATENCAO     ",
+        "PREPARE-SE        ",};
 
     int y = 0;
     for (uint i = 0; i < count_of(text); i++) {
@@ -104,7 +108,8 @@ void display_message_sinal_vermelho(uint8_t *ssd, struct render_area *frame_area
     render_on_display(ssd, frame_area);
 
     char *text[] = {
-        "  SINAL FECHADO - AGUARDE   "};
+        "SINAL FECHADO     ",
+        "AGUARDE       "};
 
     int y = 0;
     for (uint i = 0; i < count_of(text); i++) {
