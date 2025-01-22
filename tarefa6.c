@@ -170,7 +170,7 @@ int main() {
     gpio_pull_up(BTN_A_PIN);
 
     while(true){
-        SinalAberto();
+        SinalFechado();
         A_state = WaitWithRead(8000);   //espera com leitura do botäo
 
         if(A_state){               //ALGUEM APERTOU O BOTAO - SAI DO SEMAFORO NORMAL
@@ -179,7 +179,7 @@ int main() {
             sleep_ms(5000);
 
             //SINAL VERMELHO PARA OS CARROS POR 10s
-            SinalFechado();
+            SinalAberto();
             sleep_ms(10000);
 
         }else{                          //NINGUEM APERTOU O BOTAO - CONTINUA NO SEMAFORO NORMAL
@@ -187,7 +187,7 @@ int main() {
             sleep_ms(2000);
 
             //SINAL VERMELHO PARA OS CARROS POR 15s
-            SinalFechado();
+            SinalAberto();
             sleep_ms(8000);
         }
                 
