@@ -12,23 +12,26 @@ void display_message_sinal_verde(uint8_t *ssd, struct render_area *frame_area);
 void display_message_sinal_amarelo(uint8_t *ssd, struct render_area *frame_area);
 void display_message_sinal_vermelho(uint8_t *ssd, struct render_area *frame_area);
 
-
+// Definições de pinos
 #define LED_R_PIN 13
 #define LED_G_PIN 11
 #define LED_B_PIN 12
 
+// Definição de botão
 #define BTN_A_PIN 5
 
+// Variáveis globais
 int A_state = 0;    //Botao A está pressionado?
-
-// Declarando ssd e frame_area como variáveis globais
+// Variáveis para o display
 uint8_t *ssd;
 struct render_area frame_area; 
 
+// Funções
 void SinalAberto(){
     // Exibir mensagem no display
     display_message_sinal_verde(ssd, &frame_area);
 
+    // Acender LED verde e apagar os outros
     gpio_put(LED_R_PIN, 0);
     gpio_put(LED_G_PIN, 1);
     gpio_put(LED_B_PIN, 0);   
@@ -38,6 +41,7 @@ void SinalAtencao(){
     // Exibir mensagem no display
     display_message_sinal_amarelo(ssd, &frame_area);
 
+    // Acender LED amarelo e apagar os outros
     gpio_put(LED_R_PIN, 1);
     gpio_put(LED_G_PIN, 1);
     gpio_put(LED_B_PIN, 0);
@@ -47,6 +51,7 @@ void SinalFechado(){
     // Exibir mensagem no display
     display_message_sinal_vermelho(ssd, &frame_area);
 
+    // Acender LED vermelho e apagar os outros
     gpio_put(LED_R_PIN, 1);
     gpio_put(LED_G_PIN, 0);
     gpio_put(LED_B_PIN, 0);
@@ -71,6 +76,7 @@ void display_message_sinal_verde(uint8_t *ssd, struct render_area *frame_area) {
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
+    // Exibir mensagem no display
     char *text[] = {
         "SINAL ABERTO     ",
         "ATRAVESSAR COM",
@@ -89,6 +95,7 @@ void display_message_sinal_amarelo(uint8_t *ssd, struct render_area *frame_area)
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
+    // Exibir mensagem no display
     char *text[] = {
         "SINAL DE ",
         "ATENCAO     ",
@@ -107,6 +114,7 @@ void display_message_sinal_vermelho(uint8_t *ssd, struct render_area *frame_area
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, frame_area);
 
+    // Exibir mensagem no display
     char *text[] = {
         "SINAL FECHADO     ",
         "AGUARDE       "};
@@ -145,7 +153,6 @@ int main() {
 
     // zera o display inteiro
     ssd = malloc(ssd1306_buffer_length);
-
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, &frame_area);
 
@@ -163,10 +170,8 @@ int main() {
     gpio_pull_up(BTN_A_PIN);
 
     while(true){
-
         SinalAberto();
         A_state = WaitWithRead(8000);   //espera com leitura do botäo
-        //sleep_ms(8000);
 
         if(A_state){               //ALGUEM APERTOU O BOTAO - SAI DO SEMAFORO NORMAL
             //SINAL AMARELO PARA OS CARROS POR 5s
@@ -178,7 +183,6 @@ int main() {
             sleep_ms(10000);
 
         }else{                          //NINGUEM APERTOU O BOTAO - CONTINUA NO SEMAFORO NORMAL
-                                      
             SinalAtencao();
             sleep_ms(2000);
 
